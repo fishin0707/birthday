@@ -9,7 +9,7 @@
 
         :root {
             --bg-night: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-            --bg-birthday: linear-gradient(to bottom, #501010, #881212); /* 酒紅暖色 */
+            --bg-birthday: linear-gradient(to bottom, #501010, #881212);
             --text-color: #fff;
             --gold: #ffd700;
         }
@@ -85,11 +85,11 @@
         .sleigh-container {
             position: absolute;
             top: 15%;
-            right: -20%; /* 起始位置在畫面外 */
+            right: -20%;
             z-index: 5;
             font-size: 3rem;
             opacity: 0.8;
-            filter: brightness(0); /* 變成剪影 */
+            filter: brightness(0);
             animation: flyAcross 25s linear infinite;
             pointer-events: none;
         }
@@ -144,13 +144,13 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 1.5s ease-out;
-            pointer-events: none; /* 避免擋住點擊 */
+            pointer-events: none;
         }
 
         .photo-frame {
-            width: 150px; /* 照片大小 */
+            width: 150px;
             height: 150px;
-            border-radius: 50%; /* 圓形頭像 */
+            border-radius: 50%;
             border: 4px solid var(--gold);
             overflow: hidden;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -166,13 +166,11 @@
             object-fit: cover;
         }
 
-        /* 讓照片出現的 class */
         .photo-show {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* --- 動畫定義 --- */
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.1); opacity: 0.8; }
@@ -195,9 +193,7 @@
         
         @keyframes fadeInOut { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
 
-        /* 隱藏音訊播放器 */
         audio { display: none; }
-
     </style>
 </head>
 <body>
@@ -225,7 +221,7 @@
 
     <div class="photo-container" id="teacher-photo">
         <div class="photo-frame">
-            <img src="teacher.png"Teacher's Photo" id="real-photo">
+            <img src="teacher.png" alt="Teacher's Photo" id="real-photo">
         </div>
     </div>
 
@@ -252,7 +248,6 @@
         // 音樂
         const musicXmas = document.getElementById('music-xmas');
         const musicBday = document.getElementById('music-bday');
-        // 設定音量
         musicXmas.volume = 0.5;
         musicBday.volume = 0.6;
 
@@ -260,24 +255,21 @@
         let particles = [];
         let isBirthday = false;
 
-        // --- 啟動體驗 (處理音樂自動播放限制) ---
+        // --- 啟動體驗 ---
         function startExperience() {
             const overlay = document.getElementById('intro-overlay');
             overlay.style.opacity = '0';
             setTimeout(() => { overlay.style.display = 'none'; }, 1000);
             
-            // 嘗試播放聖誕音樂
-            musicXmas.play().catch(e => console.log("Audio play failed (no file?):", e));
+            musicXmas.play().catch(e => console.log("Audio play failed:", e));
             
             initCanvas();
             animate();
         }
 
-        // --- 粒子系統 (雪花/彩帶) ---
+        // --- 粒子系統 ---
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * -height;
@@ -331,21 +323,17 @@
             requestAnimationFrame(animate);
         }
 
-        // --- 核心轉場邏輯 ---
         function celebrate() {
             if (isBirthday) return;
             isBirthday = true;
 
-            // 1. 切換背景
             document.body.classList.add('celebrate');
             hintText.style.display = 'none';
-            sleigh.style.display = 'none'; // 隱藏馴鹿
+            sleigh.style.display = 'none';
 
-            // 2. 切換音樂 (淡出淡入效果由 JS 簡單控制)
             fadeOut(musicXmas);
             setTimeout(() => { musicBday.play().catch(e => console.log(e)); }, 500);
 
-            // 3. 動畫轉場
             star.style.opacity = '0';
             star.style.transform = 'scale(0) rotate(180deg)';
             mainText.style.opacity = '0';
@@ -354,7 +342,6 @@
             setTimeout(() => {
                 star.style.display = 'none';
                 cake.style.display = 'block';
-                
                 setTimeout(() => {
                     cake.style.opacity = '1';
                     cake.style.transform = 'scale(1)';
@@ -365,9 +352,7 @@
                 mainText.style.opacity = '1';
                 subText.style.opacity = '1';
                 
-                // 顯示照片
                 photoContainer.classList.add('photo-show');
-
                 particles.forEach(p => p.reset());
             }, 800);
         }
@@ -385,7 +370,6 @@
 
         window.addEventListener('resize', initCanvas);
         container.addEventListener('click', celebrate);
-
     </script>
 </body>
 </html>

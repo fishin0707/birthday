@@ -129,14 +129,17 @@
             transition: opacity 1s;
         }
 
+        /* --- 老師照片 (修改為隨機遊走模式) --- */
         .photo-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            top: 0; /* 改為從左上角定位 */
+            left: 0;
             z-index: 15;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 1.5s ease-out;
+            /* 初始位置在畫面下方外面 */
+            transform: translate(50vw, 110vh);
+            /* 增加 transition 時間讓移動更平滑緩慢，這裡設定 4秒 */
+            transition: transform 4s ease-in-out, opacity 2s ease-in-out;
             pointer-events: none;
         }
 
@@ -159,9 +162,9 @@
             object-fit: cover;
         }
 
-        .photo-show {
+        /* 啟動時變為不透明 */
+        .photo-active {
             opacity: 1;
-            transform: translateY(0);
         }
 
         @keyframes pulse {
@@ -312,6 +315,26 @@
             requestAnimationFrame(animate);
         }
 
+        // --- 新增：隨機遊走函式 ---
+        function wanderingLoop() {
+            if (!isBirthday) return; // 如果不是生日模式就停止
+
+            // 預留邊距，避免照片貼到螢幕最邊緣 (照片約160px寬+陰影)
+            const margin = 80; 
+            const safeWidth = window.innerWidth - 200; 
+            const safeHeight = window.innerHeight - 200;
+
+            // 計算隨機座標 (確保在安全範圍內)
+            const randomX = Math.max(margin, Math.random() * safeWidth);
+            const randomY = Math.max(margin, Math.random() * safeHeight);
+            
+            // 應用新的座標位置
+            photoContainer.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+            // 設定下一次移動的時間，這裡設定為 4000毫秒 (4秒)，與 CSS transition 時間一致
+            setTimeout(wanderingLoop, 4000);
+        }
+
         function celebrate() {
             if (isBirthday) return;
             isBirthday = true;
@@ -337,11 +360,15 @@
                 }, 50);
 
                 mainText.innerText = "Tonight, a star was born.";
-                subText.innerText = "老師，生日快樂！";
+                subText.innerText = "祝玉樹臨風的偉恩老師，生日快樂！願老師歲月靜好，現世安穩";
                 mainText.style.opacity = '1';
                 subText.style.opacity = '1';
                 
-                photoContainer.classList.add('photo-show');
+                // --- 修改這裡：顯示照片並開始遊走 ---
+                photoContainer.classList.add('photo-active');
+                // 啟動隨機遊走循環
+                wanderingLoop();
+                
                 particles.forEach(p => p.reset());
             }, 800);
         }
@@ -357,7 +384,11 @@
             }, 100);
         }
 
-        window.addEventListener('resize', initCanvas);
+        // 增加視窗變更大小時的處理，避免照片跑到螢幕外太遠
+        window.addEventListener('resize', () => {
+            initCanvas();
+            if(isBirthday) wanderingLoop(); 
+        });
         container.addEventListener('click', celebrate);
     </script>
 </body>

@@ -26,7 +26,6 @@
             color: var(--text-color);
         }
 
-        /* 畫布 (雪花/彩帶) */
         canvas {
             position: absolute;
             top: 0;
@@ -35,7 +34,6 @@
             pointer-events: none;
         }
 
-        /* --- 開場封面 (為了觸發音樂) --- */
         #intro-overlay {
             position: fixed;
             top: 0;
@@ -69,7 +67,6 @@
             box-shadow: 0 0 20px var(--gold);
         }
 
-        /* --- 內容容器 --- */
         .container {
             position: absolute;
             top: 50%;
@@ -81,7 +78,6 @@
             cursor: pointer;
         }
 
-        /* --- 馴鹿雪橇動畫 --- */
         .sleigh-container {
             position: absolute;
             top: 15%;
@@ -99,7 +95,6 @@
             100% { transform: translateX(-150vw) translateY(-50px) rotate(-5deg); right: 120%; }
         }
 
-        /* --- 星星與蛋糕 --- */
         .star {
             font-size: 80px;
             color: var(--gold);
@@ -118,7 +113,6 @@
             filter: drop-shadow(0 0 15px rgba(255, 200, 100, 0.6));
         }
 
-        /* --- 文字 --- */
         .message {
             margin-top: 20px;
             font-size: 1.8rem;
@@ -135,7 +129,6 @@
             transition: opacity 1s;
         }
 
-        /* --- 老師照片 --- */
         .photo-container {
             position: fixed;
             bottom: 30px;
@@ -233,7 +226,6 @@
     </audio>
 
     <script>
-        // --- 變數與設置 ---
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const star = document.getElementById('star');
@@ -245,7 +237,6 @@
         const sleigh = document.getElementById('sleigh');
         const photoContainer = document.getElementById('teacher-photo');
         
-        // 音樂
         const musicXmas = document.getElementById('music-xmas');
         const musicBday = document.getElementById('music-bday');
         musicXmas.volume = 0.5;
@@ -255,7 +246,6 @@
         let particles = [];
         let isBirthday = false;
 
-        // --- 啟動體驗 ---
         function startExperience() {
             const overlay = document.getElementById('intro-overlay');
             overlay.style.opacity = '0';
@@ -267,7 +257,6 @@
             animate();
         }
 
-        // --- 粒子系統 ---
         class Particle {
             constructor() { this.reset(); }
             reset() {
